@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<link rel="stylesheet" href="/layui/css/layui.css">
+	<style type="text/css">
+		.layui-elem-field legend {
+			font-size: 2em;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="" style="">
+		<fieldset class="layui-elem-field layui-field-title">
+			<legend>PDF拆分成图片</legend>
+		</fieldset>
+		<form class="layui-form" id="splitForm">
+			<div class="layui-form-item">
+				<label class="layui-form-label">选择PDF文件</label>
+				<div class="layui-input-block">
+					<input id="splitFile" type="file" name="file" accept=".pdf" required class="layui-input"
+						style="padding-top: 6px;">
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label">生成图片的前缀</label>
+				<div class="layui-input-block">
+					<input type="text" name="prefix" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">生成图片的目录</label>
+				<div class="layui-input-block">
+					<input type="text" name="path" required class="layui-input" value="D:\data\pdf">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">页码</label>
+				<div class="layui-input-block">
+					<input type="text" name="index" required class="layui-input" value="1">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">DPI(1-600之间)</label>
+				<div class="layui-input-block">
+					<input type="text" name="dpi" required class="layui-input" value="200">
+				</div>
+			</div>
+			<div class="layui-form-item" style="text-align: center;">
+				<button class="layui-btn" lay-submit lay-filter="splitSub">处理</button>
+				<button class="layui-btn layui-bg-blue" lay-submit lay-filter="previewSub">预览</button>
+				<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+			</div>
+		</form>
+		<fieldset class="layui-elem-field layui-field-title">
+			<legend>PDF拆分成图片后合并</legend>
+		</fieldset>
+		<form class="layui-form" id="mergeForm">
+			<div class="layui-form-item">
+				<label class="layui-form-label">选择PDF文件</label>
+				<div class="layui-input-block">
+					<input id="mergeFile" type="file" name="file" accept=".pdf" required class="layui-input"
+						style="padding-top: 6px;">
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label">生成图片的前缀</label>
+				<div class="layui-input-block">
+					<input type="text" name="prefix" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">生成图片的目录</label>
+				<div class="layui-input-block">
+					<input type="text" name="path" required class="layui-input" value="D:\data\pdf">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">页码1</label>
+				<div class="layui-input-block">
+					<input type="text" name="firstIndex" required class="layui-input" value="1">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">页码2</label>
+				<div class="layui-input-block">
+					<input type="text" name="secondIndex" required class="layui-input" value="3">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">DPI(1-600之间)</label>
+				<div class="layui-input-block">
+					<input type="text" name="dpi" required class="layui-input" value="200">
+				</div>
+			</div>
+			<div class="layui-form-item" style="text-align: center;">
+				<button class="layui-btn" lay-submit lay-filter="mergeSub">处理</button>
+				<button class="layui-btn layui-bg-blue" lay-submit lay-filter="getMergeSub">预览</button>
+				<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+			</div>
+		</form>
+		<fieldset class="layui-elem-field layui-field-title">
+			<legend>PDF批量拆分</legend>
+		</fieldset>
+		<form class="layui-form" id="batchSplitForm">
+			<div class="layui-form-item">
+				<label class="layui-form-label">PDF目录</label>
+				<div class="layui-input-block">
+					<input type="text" name="path" required class="layui-input" value="D:\tmp\pdf">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">DPI(1-600之间)</label>
+				<div class="layui-input-block">
+					<input type="text" name="dpi" required class="layui-input" value="200">
+				</div>
+			</div>
+			<div class="layui-form-item" style="text-align: center;">
+				<button class="layui-btn" lay-submit lay-filter="batchSplitSub">处理</button>
+				<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+			</div>
+		</form>
+		<fieldset class="layui-elem-field layui-field-title">
+			<legend>PDF批量合并</legend>
+		</fieldset>
+		<form class="layui-form" id="batchMergeForm">
+			<div class="layui-form-item">
+				<label class="layui-form-label">PDF目录</label>
+				<div class="layui-input-block">
+					<input type="text" name="path" required class="layui-input" value="D:\tmp\pdf">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">DPI(1-600之间)</label>
+				<div class="layui-input-block">
+					<input type="text" name="dpi" required class="layui-input" value="200">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">页码1</label>
+				<div class="layui-input-block">
+					<input type="text" name="firstIndex" required class="layui-input" value="1">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">页码2</label>
+				<div class="layui-input-block">
+					<input type="text" name="secondIndex" required class="layui-input" value="3">
+				</div>
+			</div>
+			<div class="layui-form-item" style="text-align: center;">
+				<button class="layui-btn" lay-submit lay-filter="batchMergeSub">处理</button>
+				<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+			</div>
+		</form>
+
+		<script src="/layui/layui.js"></script>
+		<script src="/js/jquery-2.1.1.min.js"></script>
+		<script>
+			layui.use('form', function () {
+				var form = layui.form;
+				form.on('submit(splitSub)', function (data) {
+					var marr = [
+						{
+							name: 'path', msg: '生成图片的目录必填'
+						},
+						{
+							name: 'dpi', msg: 'DPI必填'
+						},
+					];
+					var formData = new FormData();
+					for (var i = 0; i < marr.length; i++) {
+						if (data.field[marr[i].name].length == 0) {
+							layer.msg(marr[i].msg);
+							return false;
+						}
+						formData.append(marr[i].name, data.field[marr[i].name]);
+					}
+					formData.append('file', $('#splitFile')[0].files[0]);
+					post("/pdf/pic/split", formData)
+					return false;
+				});
+
+				form.on('submit(previewSub)', function (data) {
+					var formData = new FormData();
+					formData.append('file', $('#splitFile')[0].files[0]);
+					formData.append('dpi', data.field['dpi']);
+					formData.append('index', data.field['index']);
+					preview("/pdf/pic/preview", formData)
+					return false;
+				});
+
+				form.on('submit(mergeSub)', function (data) {
+					var marr = [
+						{
+							name: 'path', msg: '生成图片的目录必填'
+						},
+						{
+							name: 'firstIndex', msg: '页码1'
+						},
+						{
+							name: 'secondIndex', msg: '页码2'
+						},
+						{
+							name: 'dpi', msg: 'DPI必填'
+						},
+					];
+					var formData = new FormData();
+					for (var i = 0; i < marr.length; i++) {
+						if (data.field[marr[i].name].length == 0) {
+							layer.msg(marr[i].msg);
+							return false;
+						}
+						formData.append(marr[i].name, data.field[marr[i].name]);
+					}
+					formData.append('file', $('#mergeFile')[0].files[0]);
+					post("/pdf/pic/merge", formData)
+					return false;
+				});
+
+				form.on('submit(getMergeSub)', function (data) {
+					var marr = [
+						{
+							name: 'firstIndex', msg: '页码1'
+						},
+						{
+							name: 'secondIndex', msg: '页码2'
+						},
+						{
+							name: 'dpi', msg: 'DPI必填'
+						},
+					];
+					var formData = new FormData();
+					for (var i = 0; i < marr.length; i++) {
+						if (data.field[marr[i].name].length == 0) {
+							layer.msg(marr[i].msg);
+							return false;
+						}
+						formData.append(marr[i].name, data.field[marr[i].name]);
+					}
+					formData.append('file', $('#mergeFile')[0].files[0]);
+					preview("/pdf/pic/getMerge", formData)
+					return false;
+				});
+
+				form.on('submit(batchSplitSub)', function (data) {
+					var marr = [
+						{
+							name: 'path', msg: 'PDF目录'
+						},
+						{
+							name: 'dpi', msg: 'DPI必填'
+						},
+					];
+					var formData = new FormData();
+					for (var i = 0; i < marr.length; i++) {
+						if (data.field[marr[i].name].length == 0) {
+							layer.msg(marr[i].msg);
+							return false;
+						}
+						formData.append(marr[i].name, data.field[marr[i].name]);
+					}
+					post("/pdf/pic/batchSplit", formData)
+					return false;
+				});
+
+				form.on('submit(batchMergeSub)', function (data) {
+					var marr = [
+						{
+							name: 'path', msg: 'PDF目录'
+						},
+						{
+							name: 'dpi', msg: 'DPI必填'
+						},
+						{
+							name: 'firstIndex', msg: '页码1'
+						},
+						{
+							name: 'secondIndex', msg: '页码2'
+						},
+					];
+					var formData = new FormData();
+					for (var i = 0; i < marr.length; i++) {
+						if (data.field[marr[i].name].length == 0) {
+							layer.msg(marr[i].msg);
+							return false;
+						}
+						formData.append(marr[i].name, data.field[marr[i].name]);
+					}
+					post("/pdf/pic/batchMerge", formData)
+					return false;
+				});
+
+			});
+
+			function post(url, formData) {
+				console.log(formData);
+				$.ajax({
+					url: url,
+					data: formData,
+					async: false,
+					type: 'post',
+					processData: false, // 不要处理数据
+					contentType: false, // 不要设置Content-Type请求头，让浏览器自动设置
+					success: function (data) {
+						layer.msg('成功');
+						return false;
+					},
+					error: function (xhr, status, error) {
+						layer.msg(error);
+						return false;
+					}
+				});
+			}
+
+			function preview(url, formData) {
+				console.log(formData);
+				fetch(url, {
+					method: "POST", // 使用 POST 方法
+					processData: false, // 不要处理数据
+					contentType: false, // 不要设置Content-Type请求头，让浏览器自动设置
+					body: formData
+				})
+					.then(response => {
+						if (!response.ok) {
+							throw new Error("请求失败，状态码：" + response.status);
+						}
+						return response.blob(); // 将响应体解析为 Blob
+					})
+					.then(blob => {
+						const imageUrl = URL.createObjectURL(blob); // 创建图片 URL
+						layer.photos({
+							photos: {
+								"title": "",
+								"start": 0,
+								"data": [
+									{
+										"alt": "",
+										"pid": 5,
+										"src": imageUrl,
+									}
+								]
+							},
+							footer: true
+						});
+					})
+					.catch(error => {
+						console.error("请求发生错误：", error);
+					});
+			}
+		</script>
+</body>
+
+</html>

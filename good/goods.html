@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<link rel="stylesheet" href="/layui/css/layui.css">
+	<style type="text/css">
+		.layui-elem-field legend {
+			font-size: 2em;
+		}
+	</style>
+</head>
+
+<body style="">
+	<fieldset class="layui-elem-field layui-field-title">
+		<legend>商品列表</legend>
+	</fieldset>
+
+	<div id="goodsTable"></div>
+
+	<script src="/layui/layui.js"></script>
+	<script>
+		layui.use(['table'], function () {
+			var table = layui.table;
+
+			// 初始化表格
+			table.render({
+				elem: '#goodsTable',
+				url: '/db/goods', // 数据接口
+				cols: [[ // 列配置
+					{ field: 'id', title: 'ID', width: 100, sort: true },
+					{ field: 'name', title: '商品名称', width: 200 },
+					{ field: 'goodCode', title: '商品代码', width: 100 },
+					{ field: 'barCode', title: '条码', width: 150 },
+					{ field: 'spec', title: '规格', width: 150 },
+					{ field: 'unit', title: '单位', width: 150 },
+					{ field: 'taxPrice', title: '含税售价', width: 150},
+				]],
+				page: false // 开启分页
+			});
+		});
+	</script>
+</body>
+
+</html>
